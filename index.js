@@ -1,16 +1,23 @@
 /**
- * @file 包管理功能模块
+ * @file package管理功能模块
  * @author errorrik[errorrik@gmail.com]
  */
 
 
 
-
+/**
+ * 字符串驼峰化
+ * 
+ * @inner
+ * @param {string} source 源字符串
+ * @return {string} 
+ */
 function camelize( source ) {
     return source.replace( /-([a-z])/ig, function ( $0, alpha ) {
         return alpha.toUpperCase();
     } );
 }
+
 
 require( 'fs' ).readdirSync( __dirname + '/lib' ).forEach(
     function ( file ) {

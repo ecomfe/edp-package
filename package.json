@@ -4,7 +4,8 @@
     "version": "0.4.0",
     "contributors": [
         { "name": "errorrik", "email": "errorrik@gmail.com" },
-        { "name": "leeight", "email" : "leeight@gmail.com" }
+        { "name": "leeight", "email" : "leeight@gmail.com" },
+        { "name": "fanxueliang", "email" : "fanxueliang.g@gmail.com" }
     ],
     "dependencies": {
         "edp-config": "~0.4.2",
