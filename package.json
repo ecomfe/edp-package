@@ -1,7 +1,7 @@
 {
     "name": "edp-package",
     "description": "Package for edp package manage",
-    "version": "0.4.4",
+    "version": "0.4.6",
     "contributors": [
         { "name": "errorrik", "email": "errorrik@gmail.com" },
         { "name": "leeight", "email" : "leeight@gmail.com" },
@@ -9,7 +9,7 @@
     ],
     "dependencies": {
         "edp-config": "~0.4.2",
-        "edp-project": "~0.4.0",
+        "edp-project": "~0.4.18",
         "mkdirp": "~0.3.3",
         "request": "~2.21",
         "semver": "~1.1",
