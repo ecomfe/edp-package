@@ -79,6 +79,17 @@ edpPackage.importFromRegistry(
 - `importDir` {string=}
 - `callback` {Function=}
 
+### importFromPackage( file, options )
+
+从`package.json`中导入包
+
+- `file` {string}
+- `options` {Object=}
+- `options.older` {boolean=}
+- `options.saveDev` {boolean=}
+- `options.importDir` {string=}
+- `options.callback` {Function=}
+
 
 ### search( keyword, callback )
 
