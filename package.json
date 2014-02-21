@@ -8,6 +8,7 @@
         { "name": "fanxueliang", "email" : "fanxueliang.g@gmail.com" }
     ],
     "dependencies": {
+        "edp-core": "~0.0.1",
         "edp-config": "~0.4.2",
         "edp-project": "~0.4.18",
         "mkdirp": "~0.3.3",
