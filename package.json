@@ -12,7 +12,6 @@
         "edp-config": "~0.4.2",
         "edp-project": "~0.4.18",
         "mkdirp": "~0.3.3",
-        "request": "~2.21",
         "semver": "~1.1",
         "tar": "~0.1.17",
         "fstream": "~0.1.22",
@@ -20,5 +19,8 @@
         "npm-registry-client": "~0.2.18"
     },
     "main": "index.js",
-    "repository": "git://github.com/ecomfe/edp-package"
+    "repository": "git://github.com/ecomfe/edp-package",
+    "scripts": {
+        "test": "make -C test"
+    }
 }
