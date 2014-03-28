@@ -1,17 +1,17 @@
 /***************************************************************************
- * 
+ *
  * Copyright (c) 2014 Baidu.com, Inc. All Rights Reserved
- * $Id$ 
- * 
+ * $Id$
+ *
  **************************************************************************/
- 
- 
- 
+
+
+
 /**
  * download.js ~ 2014/02/24 10:55:37
  * @author leeight(liyubei@baidu.com)
- * @version $Revision$ 
- * @description 
+ * @version $Revision$
+ * @description
  * 测试一下，减少对`request`的依赖
  **/
 var http = require( 'http' );
@@ -25,7 +25,7 @@ http.get( url, function( res ){
   var stream = fs.createWriteStream( fullPath );
   res.pipe( stream );
 }).on( 'error', function( e ){
-    console.log("Got error: " + e.message);
+    console.log('Got error: ' + e.message);
 });
 
 
