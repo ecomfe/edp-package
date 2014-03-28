@@ -18,7 +18,7 @@ var http = require( 'http' );
 var path = require( 'path' );
 var fs = require( 'fs' );
 
-var url = 'http://registry.edp.baidu.com/er/-/er-3.0.0.tgz';
+var url = 'http://edp-registry.baidu.com/er/-/er-3.0.0.tgz';
 var fullPath = path.join( __dirname, 'er-3.0.0.tgz' );
 
 http.get( url, function( res ){
