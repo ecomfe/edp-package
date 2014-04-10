@@ -1,14 +1,14 @@
 {
     "name": "edp-package",
     "description": "Package for edp package manage",
-    "version": "0.4.11",
+    "version": "0.4.12",
     "contributors": [
         { "name": "errorrik", "email": "errorrik@gmail.com" },
         { "name": "leeight", "email" : "leeight@gmail.com" },
         { "name": "fanxueliang", "email" : "fanxueliang.g@gmail.com" }
     ],
     "dependencies": {
-        "edp-core": "~1.0.7",
+        "edp-core": "~1.0.12",
         "edp-config": "~1.0.2",
         "edp-project": "~0.4.31",
         "mkdirp": "~0.3.3",
