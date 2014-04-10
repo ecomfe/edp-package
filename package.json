@@ -1,7 +1,7 @@
 {
     "name": "edp-package",
     "description": "Package for edp package manage",
-    "version": "0.4.12",
+    "version": "0.4.13",
     "contributors": [
         { "name": "errorrik", "email": "errorrik@gmail.com" },
         { "name": "leeight", "email" : "leeight@gmail.com" },
@@ -10,7 +10,7 @@
     "dependencies": {
         "edp-core": "~1.0.12",
         "edp-config": "~1.0.2",
-        "edp-project": "~0.4.31",
+        "edp-project": "~0.5.0",
         "mkdirp": "~0.3.3",
         "semver": "~2.2.1",
         "tar": "~0.1.17",
@@ -21,7 +21,6 @@
     "main": "index.js",
     "repository": "git://github.com/ecomfe/edp-package",
     "scripts": {
-        "test": "make -C test",
-        "prepare": "npm ln edp-core edp-config edp-project"
+        "test": "make -C test"
     }
 }
