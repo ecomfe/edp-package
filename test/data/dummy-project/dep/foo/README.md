@@ -1,0 +1,2 @@
+这个目录不是合法的package，因此是不应该出现在packages.mainfest里面的
+
