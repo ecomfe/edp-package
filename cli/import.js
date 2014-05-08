@@ -32,12 +32,20 @@ cli.options = [ 'older', 'save-dev' ];
  * @param {Array} args 命令运行参数
  */
 cli.main = function ( args, opts ) {
-    var name = args[ 0 ];
-    if ( !name ) {
+    if ( args.length === 0 ) {
         console.error( cli.usage );
         process.exit( 0 );
     }
+    var uniquePackages = args.filter(function(elem, pos) {
+        return args.indexOf(elem) == pos;
+    }); 
 
+    uniquePackages.forEach(function (name) {
+        importPackage(name);
+    });
+};
+
+function importPackage(name) {
     var path = require( 'path' );
     var pkg = require( '../index' );
     var fs = require( 'fs' );
@@ -59,7 +67,7 @@ cli.main = function ( args, opts ) {
     else {
         pkg.importFromRegistry( name );
     }
-};
+}
 
 /**
  * 命令行配置项
