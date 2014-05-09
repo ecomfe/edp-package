@@ -1,37 +1,27 @@
 {
-  "name": "edp-package",
-  "description": "Package for edp package manage",
-  "version": "0.4.16",
-  "contributors": [
-    {
-      "name": "errorrik",
-      "email": "errorrik@gmail.com"
+    "name": "edp-package",
+    "description": "Package for edp package manage",
+    "version": "0.4.17",
+    "contributors": [
+        { "name": "errorrik", "email": "errorrik@gmail.com" },
+        { "name": "leeight", "email" : "leeight@gmail.com" },
+        { "name": "fanxueliang", "email" : "fanxueliang.g@gmail.com" }
+    ],
+    "dependencies": {
+        "edp-core": "~1.0.12",
+        "edp-config": "~1.0.2",
+        "edp-project": "~0.5.0",
+        "mkdirp": "~0.3.3",
+        "semver": "~2.2.1",
+        "tar": "~0.1.17",
+        "fstream": "~0.1.22",
+        "adm-zip": "~0.4.3",
+        "npm-registry-client": "~0.4.4",
+        "async": "~0.7.0"
     },
-    {
-      "name": "leeight",
-      "email": "leeight@gmail.com"
-    },
-    {
-      "name": "fanxueliang",
-      "email": "fanxueliang.g@gmail.com"
+    "main": "index.js",
+    "repository": "git://github.com/ecomfe/edp-package",
+    "scripts": {
+        "test": "make -C test"
     }
-  ],
-  "dependencies": {
-    "edp-core": "~1.0.12",
-    "edp-config": "~1.0.2",
-    "edp-project": "~0.5.0",
-    "mkdirp": "~0.3.3",
-    "semver": "~2.2.1",
-    "tar": "~0.1.17",
-    "fstream": "~0.1.22",
-    "adm-zip": "~0.4.3",
-    "npm-registry-client": "~0.4.4",
-    "async": "~0.7.0",
-    "fs.extra": "~1.2.1"
-  },
-  "main": "index.js",
-  "repository": "git://github.com/ecomfe/edp-package",
-  "scripts": {
-    "test": "make -C test"
-  }
 }
