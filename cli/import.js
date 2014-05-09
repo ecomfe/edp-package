@@ -36,11 +36,7 @@ cli.main = function ( args, opts ) {
         console.error( cli.usage );
         process.exit( 0 );
     }
-    var uniquePackages = args.filter(function(elem, pos) {
-        return args.indexOf(elem) == pos;
-    }); 
-
-    uniquePackages.forEach(function (name) {
+    args.forEach(function (name) {
         importPackage(name);
     });
 };
