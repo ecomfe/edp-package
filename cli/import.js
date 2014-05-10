@@ -2,6 +2,9 @@
  * @file 项目导入依赖包模块的命令行执行
  * @author errorrik[errorrik@gmail.com]
  */
+var fs = require( 'fs' );
+var path = require( 'path' );
+
 var edp = require( 'edp-core' );
 
 /**
@@ -35,7 +38,6 @@ function getTemporaryImportDir() {
         return TemporaryImportDir;
     }
 
-    var path = require( 'path' );
     var os = require( 'os' );
     var mkdir = require( 'mkdirp' );
 
@@ -60,7 +62,7 @@ cli.main = function ( args, opts ) {
 
     require( 'async' ).eachLimit( args, 1,
         importPackage, refreshProjectConfiguration );
-}
+};
 
 /**
  * 导入package成功之后，更新项目的配置信息
@@ -68,16 +70,21 @@ cli.main = function ( args, opts ) {
  * 这样子就可以避免edp-package对edp-project的依赖了
  */
 function refreshProjectConfiguration( err ) {
-    if ( err ) throw err;
+    if ( err ) {
+        throw err;
+    }
+
+    // 把TemporaryImportDir/dep目录下面的内容拷贝过来
+    var from = path.join( getTemporaryImportDir(), 'dep' );
+    var to = path.join( process.cwd(), 'dep' );
+    require( '../lib/util/copy-dir' )( from, to );
 
     var cmd = edp.util.spawn( 'edp',
         [ 'project', 'updateLoaderConfig' ], { stdio: 'inherit' } );
     cmd.on( 'close', function( code ){
-        // IGNORE
+        // 删除ImportDir
+        edp.util.rmdir( getTemporaryImportDir() );
     });
-
-    // 删除ImportDir
-    // edp.util.rmdir( getImportDir() );
 }
 
 /**
@@ -86,9 +93,7 @@ function refreshProjectConfiguration( err ) {
  * @param {function} callback 结束之后回调函数.
  */
 function importPackage( name, callback ) {
-    var path = require( 'path' );
     var pkg = require( '../index' );
-    var fs = require( 'fs' );
     var file = path.resolve( process.cwd(), name );
     var importDir = getTemporaryImportDir();
 
@@ -98,19 +103,10 @@ function importPackage( name, callback ) {
     ) {
         pkg.importFromFile( file, importDir, callback );
     }
-    /*
-    else if ( path.basename( file ) == 'package.json' ) {
-        var options = {
-            older: opts[ 'older' ],
-            saveDev: opts[ 'save-dev' ]
-        };
-        def = pkg.importFromPackage( file, options );
-    }
-    */
     else {
         pkg.importFromRegistry( name, importDir, callback );
     }
-};
+}
 
 /**
  * 命令行配置项
