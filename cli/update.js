@@ -25,7 +25,7 @@ cli.description = '更新依赖包';
  *
  * @type {Array}
  */
-cli.options = [ 'reserve-older', 'force' ];
+cli.options = [ 'delete-older', 'force' ];
 
 /**
  * 模块命令行运行入口

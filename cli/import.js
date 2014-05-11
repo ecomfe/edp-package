@@ -31,23 +31,9 @@ cli.options = [ 'older', 'save-dev' ];
 
 /**
  * 临时创建的目录，程序退出的时候清除之
+ * @type {string}
  */
-var TemporaryImportDir = null;
-function getTemporaryImportDir() {
-    if ( TemporaryImportDir ) {
-        return TemporaryImportDir;
-    }
-
-    var os = require( 'os' );
-    var mkdir = require( 'mkdirp' );
-
-    var name = require( '../lib/util/get-temp-name' )();
-    TemporaryImportDir = path.join( os.tmpdir(), name );
-    mkdir.sync( path.join( TemporaryImportDir, '.edpproj' ) );
-    mkdir.sync( path.join( TemporaryImportDir, 'dep' ) );
-
-    return TemporaryImportDir;
-}
+var kTemporaryImportDir = require( '../lib/util/get-temp-import-dir' )();
 
 /**
  * 模块命令行运行入口
@@ -60,7 +46,7 @@ cli.main = function ( args, opts ) {
         process.exit( 0 );
     }
 
-    require( 'async' ).eachLimit( args, 1,
+    require( 'async' ).eachSeries( args,
         importPackage, refreshProjectConfiguration );
 };
 
@@ -75,7 +61,7 @@ function refreshProjectConfiguration( err ) {
     }
 
     // 把TemporaryImportDir/dep目录下面的内容拷贝过来
-    var from = path.join( getTemporaryImportDir(), 'dep' );
+    var from = path.join( kTemporaryImportDir, 'dep' );
     var to = path.join( process.cwd(), 'dep' );
     require( '../lib/util/copy-dir' )( from, to );
 
@@ -83,7 +69,7 @@ function refreshProjectConfiguration( err ) {
         [ 'project', 'updateLoaderConfig' ], { stdio: 'inherit' } );
     cmd.on( 'close', function( code ){
         // 删除ImportDir
-        edp.util.rmdir( getTemporaryImportDir() );
+        edp.util.rmdir( kTemporaryImportDir );
     });
 }
 
@@ -95,7 +81,7 @@ function refreshProjectConfiguration( err ) {
 function importPackage( name, callback ) {
     var pkg = require( '../index' );
     var file = path.resolve( process.cwd(), name );
-    var importDir = getTemporaryImportDir();
+    var importDir = kTemporaryImportDir;
 
     if (
         /\.(gz|tgz|zip)$/.test( name )
