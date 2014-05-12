@@ -36,34 +36,8 @@ cli.main = function ( args, opts ) {
         console.error( cli.usage );
         process.exit( 0 );
     }
-    args.forEach(function (name) {
-        importPackage(name);
-    });
+    require('../lib/import-all')( args, opts );
 };
-
-function importPackage(name) {
-    var path = require( 'path' );
-    var pkg = require( '../index' );
-    var fs = require( 'fs' );
-    var file = path.resolve( process.cwd(), name );
-
-    if (
-        /\.(gz|tgz|zip)$/.test( name )
-        && fs.existsSync( file )
-    ) {
-        pkg.importFromFile( file );
-    }
-    else if ( path.basename( file ) == 'package.json' ) {
-        var options = {
-                older: opts[ 'older' ],
-                saveDev: opts[ 'save-dev' ]
-            };
-        pkg.importFromPackage( file , options );
-    }
-    else {
-        pkg.importFromRegistry( name );
-    }
-}
 
 /**
  * 命令行配置项
