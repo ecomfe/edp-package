@@ -36,7 +36,7 @@ cli.main = function ( args, opts ) {
         console.error( cli.usage );
         process.exit( 0 );
     }
-    require('../lib/import-all')( args, opts );
+    require( '../lib/import-all' )( args, opts );
 };
 
 /**
