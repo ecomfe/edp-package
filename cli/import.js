@@ -32,33 +32,11 @@ cli.options = [ 'older', 'save-dev' ];
  * @param {Array} args 命令运行参数
  */
 cli.main = function ( args, opts ) {
-    var name = args[ 0 ];
-    if ( !name ) {
+    if ( args.length === 0 ) {
         console.error( cli.usage );
         process.exit( 0 );
     }
-
-    var path = require( 'path' );
-    var pkg = require( '../index' );
-    var fs = require( 'fs' );
-    var file = path.resolve( process.cwd(), name );
-
-    if (
-        /\.(gz|tgz|zip)$/.test( name )
-        && fs.existsSync( file )
-    ) {
-        pkg.importFromFile( file );
-    }
-    else if ( path.basename( file ) == 'package.json' ) {
-        var options = {
-                older: opts[ 'older' ],
-                saveDev: opts[ 'save-dev' ]
-            };
-        pkg.importFromPackage( file , options );
-    }
-    else {
-        pkg.importFromRegistry( name );
-    }
+    require( '../lib/import-all' )( args, opts );
 };
 
 /**
