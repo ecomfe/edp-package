@@ -42,7 +42,7 @@ var kTemporaryImportDir = require( '../lib/util/get-temp-import-dir' )();
  */
 cli.main = function ( args, opts ) {
     if ( !args.length ) {
-        console.error( cli.usage );
+        console.log( 'See `edp import --help`' );
         process.exit( 0 );
     }
 
