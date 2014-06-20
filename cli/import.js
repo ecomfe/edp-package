@@ -89,6 +89,9 @@ function importPackage( name, callback ) {
     ) {
         pkg.importFromFile( file, importDir, callback );
     }
+    else if ( /^https?:\/\/(.+)/.test( name ) ) {
+        pkg.importFromRemote( name, importDir, callback );
+    }
     else {
         pkg.importFromRegistry( name, importDir, callback );
     }
