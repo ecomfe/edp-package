@@ -42,8 +42,17 @@ var kTemporaryImportDir = require( '../lib/util/get-temp-import-dir' )();
  */
 cli.main = function ( args, opts ) {
     if ( !args.length ) {
-        console.log( 'See `edp import --help`' );
-        process.exit( 0 );
+        var getDependencies = require( '../lib/get-defined-dependencies' );
+        var dependencies = getDependencies();
+        if ( dependencies ) {
+            require( 'async' ).eachSeries( Object.keys( dependencies ),
+                importPackage, refreshProjectConfiguration );
+            return;
+        }
+        else {
+            console.log( 'See `edp import --help`' );
+            process.exit( 0 );
+        }
     }
 
     require( 'async' ).eachSeries( args,
