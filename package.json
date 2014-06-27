@@ -1,7 +1,7 @@
 {
     "name": "edp-package",
     "description": "Package for edp package manage",
-    "version": "0.5.2",
+    "version": "0.5.3",
     "contributors": [
         { "name": "errorrik", "email": "errorrik@gmail.com" },
         { "name": "leeight", "email" : "leeight@gmail.com" },
