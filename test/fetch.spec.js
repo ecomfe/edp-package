@@ -28,6 +28,17 @@ describe('fetch', function(){
         });
     });
 
+    it('default with dist-tags', function(done){
+        fetch('my-test@latest', kToDir, function(){
+            expect(fs.existsSync(path.join(kToDir,
+                'my-test-1.0.8.tgz'))).toBe(true);
+            fetch('my-test@no-such-tag', kToDir, function(error){
+                expect(error).not.toBe(null);
+                done();
+            });
+        });
+    });
+
     it('er', function(done){
         fetch('er@3.1.0-beta.4', kToDir, function(){
             expect(fs.existsSync(path.join(kToDir,
