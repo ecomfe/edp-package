@@ -11,11 +11,18 @@ var cli = require('../cli/import').cli;
 var kProjectDir = path.join(__dirname, 'data', 'p3');
 
 describe('import-cli', function(){
+    var originalTimeout;
+
     beforeEach(function(){
         process.chdir(kProjectDir);
+
+        originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
     });
 
     afterEach(function(){
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+
         if (fs.existsSync('dep')) {
             edp.util.rmdir('dep');
         }
