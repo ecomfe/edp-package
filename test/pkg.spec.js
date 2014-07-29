@@ -1,6 +1,7 @@
-describe('util', function(){
-    it('get-dependencies-info', function(){
-        var getDependenciesInfo = require('../lib/util/get-dependencies-info');
+describe('pkg', function(){
+    it('getDependencies', function(){
+        var pkg = require('../lib/pkg');
+        var getDependenciesInfo = pkg.getDependencies;
 
         expect( getDependenciesInfo({}) ).toEqual( {} );
 

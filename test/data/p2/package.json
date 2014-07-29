@@ -1,0 +1,36 @@
+{
+    "name": "bec-web",
+    "version": "0.0.1",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "edp": {
+        "wwwroot": "/",
+        "depDir": "dep",
+        "srcDir": "src",
+        "loaderAutoConfig": "js,htm,html,tpl,vm,phtml",
+        "loaderUrl": "http://s1.bdstatic.com/r/www/cache/ecom/esl/1-8-2/esl.js",
+        "dependencies": {
+            "ef": "3.x",
+            "er": "3.x",
+            "mini-event": "1.x",
+            "etpl": "2.x",
+            "esui": "3.x",
+            "underscore": "1.x",
+            "moment": "2.x",
+            "esf-ms": "1.x",
+            "est": "1.x",
+            "bat-ria": "0.x",
+            "urijs": "1.x",
+            "jquery": "1.x",
+            "echarts": "1.x",
+            "zrender": "1.x",
+            "jquery.cookie": "1.x"
+        }
+    },
+    "dependencies": {},
+    "author": "leeight@gmail.com",
+    "license": "ISC"
+}

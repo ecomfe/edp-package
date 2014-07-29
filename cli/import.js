@@ -2,10 +2,14 @@
  * @file 项目导入依赖包模块的命令行执行
  * @author errorrik[errorrik@gmail.com]
  */
-var fs = require( 'fs' );
-var path = require( 'path' );
+var fs = require('fs');
+var path = require('path');
 
-var edp = require( 'edp-core' );
+var async = require('async');
+var edp = require('edp-core');
+
+var pkg = require('../lib/pkg');
+var factory = require('../lib/context');
 
 /**
  * 命令行配置项
@@ -30,33 +34,37 @@ cli.description = '导入包';
 cli.options = [ 'older', 'save-dev' ];
 
 /**
- * 临时创建的目录，程序退出的时候清除之
- * @type {string}
- */
-var kTemporaryImportDir = require( '../lib/util/get-temp-import-dir' )();
-
-/**
  * 模块命令行运行入口
  *
- * @param {Array} args 命令运行参数
+ * @param {Array} args 命令运行参数.
+ * @param {Array} opts 命令运行参数.
+ * @param {function=} function 执行完毕之后的回掉函数.
  */
-cli.main = function ( args, opts ) {
-    if ( !args.length ) {
-        var getDependencies = require( '../lib/get-defined-dependencies' );
-        var dependencies = getDependencies();
-        if ( dependencies ) {
-            require( 'async' ).eachSeries( Object.keys( dependencies ),
-                importPackage, refreshProjectConfiguration );
+cli.main = function (args, opts, opt_callback) {
+    var context = factory.create(
+        pkg.getTempImportDir(),
+        process.cwd());
+    var callback = opt_callback || function(){};
+
+    if (!args.length) {
+        var dependencies = pkg.getDefinedDependencies();
+        if (dependencies) {
+            async.eachSeries(
+                Object.keys(dependencies),
+                importPackage(context),
+                refresh(context, callback));
             return;
         }
         else {
-            console.log( 'See `edp import --help`' );
-            process.exit( 0 );
+            console.log('See `edp import --help`');
+            process.exit(0);
         }
     }
 
-    require( 'async' ).eachSeries( args,
-        importPackage, refreshProjectConfiguration );
+    async.eachSeries(
+        args,
+        importPackage(context),
+        refresh(context, callback));
 };
 
 /**
@@ -64,22 +72,30 @@ cli.main = function ( args, opts ) {
  * 采用的方式是执行 edp project updateLoaderConfig
  * 这样子就可以避免edp-package对edp-project的依赖了
  */
-function refreshProjectConfiguration( err ) {
-    if ( err ) {
-        throw err;
-    }
+function refresh(context, callback) {
+    return function(err) {
+        if (err) {
+            callback(err);
+            throw err;
+        }
 
-    // 把TemporaryImportDir/dep目录下面的内容拷贝过来
-    var from = path.join( kTemporaryImportDir, 'dep' );
-    var to = path.join( process.cwd(), 'dep' );
-    require( '../lib/util/copy-dir' )( from, to );
+        require('../lib/util/copy-dir')(
+            context.getShadowDependenciesDir(),
+            context.getDependenciesDir());
 
-    var cmd = edp.util.spawn( 'edp',
-        [ 'project', 'updateLoaderConfig' ], { stdio: 'inherit' } );
-    cmd.on( 'close', function( code ){
-        // 删除ImportDir
-        edp.util.rmdir( kTemporaryImportDir );
-    });
+        var cmd = edp.util.spawn(
+            'edp',
+            ['project', 'updateLoaderConfig'],
+            { stdio: 'inherit' }
+        );
+        cmd.on('error', function(error){
+            console.log(error);
+        });
+        cmd.on('close', function(code){
+            edp.util.rmdir(context.getShadowDir());
+            callback(code === 0 ? null : code);
+        });
+    };
 }
 
 /**
@@ -87,23 +103,27 @@ function refreshProjectConfiguration( err ) {
  * @param {string} name 要导入的package的名字.
  * @param {function} callback 结束之后回调函数.
  */
-function importPackage( name, callback ) {
-    var pkg = require( '../index' );
-    var file = path.resolve( process.cwd(), name );
-    var importDir = kTemporaryImportDir;
+function importPackage(context) {
+    return function(name, callback) {
+        var file = path.resolve(process.cwd(), name);
 
-    if (
-        /\.(gz|tgz|zip)$/.test( name )
-        && fs.existsSync( file )
-    ) {
-        pkg.importFromFile( file, importDir, callback );
-    }
-    else if ( /^https?:\/\/(.+)/.test( name ) ) {
-        pkg.importFromRemote( name, importDir, callback );
-    }
-    else {
-        pkg.importFromRegistry( name, importDir, callback );
-    }
+        var method = null;
+        var args = name;
+
+        if ( /\.(gz|tgz|zip)$/.test(name) && fs.existsSync(file)) {
+            args = file;
+            edp.log.info('GET file://%s', path.normalize(file));
+            method = require('../lib/import-from-file');
+        }
+        else if (/^https?:\/\/(.+)/.test(name)) {
+            method = require('../lib/import-from-remote');
+        }
+        else {
+            method = require('../lib/import-from-registry');
+        }
+
+        method(context, args, callback);
+    };
 }
 
 /**

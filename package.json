@@ -16,7 +16,6 @@
         "tar": "~0.1.17",
         "fstream": "~0.1.22",
         "adm-zip": "~0.4.3",
-        "npm-registry-client": "~0.4.4",
         "async": "~0.8.0"
     },
     "main": "index.js",
