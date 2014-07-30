@@ -19,7 +19,42 @@ describe('api', function(){
     beforeEach(function() {
         originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-        mkdirp.sync(kAPIDir);
+
+        mkdirp.sync(path.join(kAPIDir, '.edpproj'));
+        fs.writeFileSync(path.join(kAPIDir, '.edpproj', 'metadata'), JSON.stringify({
+            "wwwroot": "/",
+            "depDir": "dep",
+            "srcDir": "src",
+            "loaderAutoConfig": "js,htm,html,tpl,vm,phtml",
+            "loaderUrl": "http://s1.bdstatic.com/r/www/cache/ecom/esl/1-8-2/esl.js",
+            "dependencies": {}
+        }));
+
+        mkdirp.sync(path.join(kAPIDir, '2', '.edpproj'));
+        fs.writeFileSync(path.join(kAPIDir, '2', 'package.json'), JSON.stringify({
+            "name": "x",
+            "version": "0.0.1",
+            "description": "edp project",
+            "main": "index.js",
+            "scripts": {
+                "test": "echo \"Error: no test specified\" && exit 1"
+            },
+            "edp": {
+                "wwwroot": "/",
+                "depDir": "dep",
+                "srcDir": "src",
+                "loaderAutoConfig": "js,htm,html,tpl,vm,phtml",
+                "loaderUrl": "http://s1.bdstatic.com/r/www/cache/ecom/esl/1-8-2/esl.js",
+                "dependencies": {
+                    "er": "hello world"
+                }
+            },
+            "dependencies": {},
+            "author": "leeight@gmail.com",
+            "repository": "empty",
+            "license": "BSD",
+            "readme": "README"
+        }));
     });
 
     afterEach(function() {
@@ -48,6 +83,10 @@ describe('api', function(){
             expect(error).toBeNull();
             expect(pkg.name).toBe('my-test');
             expect(fs.existsSync(path.join(kAPIDir, 'dep', 'my-test'))).toBe(true);
+            var xyz = fs.readFileSync(path.join(kAPIDir, '.edpproj', 'metadata'), 'utf-8');
+            var dependencies = JSON.parse(xyz).dependencies;
+            expect(dependencies['my-test']).not.toBeUndefined();
+
             done();
         });
     });
@@ -66,7 +105,32 @@ describe('api', function(){
             expect(error).toBeNull();
             expect(pkg.name).toBe('my-test');
             expect(fs.existsSync(path.join(kAPIDir, 'dep', 'my-test'))).toBe(true);
+            var xyz = fs.readFileSync(path.join(kAPIDir, '.edpproj', 'metadata'), 'utf-8');
+            var dependencies = JSON.parse(xyz).dependencies;
+            expect(dependencies['my-test']).not.toBeUndefined();
             done();
+        });
+    });
+
+    it('importFromRegistry with new format', function(done){
+        api.importFromRegistry('my-test', path.join(kAPIDir, '2'), function(error, pkg){
+            expect(error).toBeNull();
+            expect(pkg.name).toBe('my-test');
+            expect(fs.existsSync(path.join(kAPIDir, '2', 'dep', 'my-test'))).toBe(true);
+            var xyz = fs.readFileSync(path.join(kAPIDir, '2', 'package.json'), 'utf-8');
+            var dependencies = JSON.parse(xyz).edp.dependencies;
+            expect(dependencies['my-test']).not.toBeUndefined();
+
+            api.importFromRegistry('er@latest', path.join(kAPIDir, '2'), function(error, pkg){
+                expect(error).toBeNull();
+                expect(pkg.name).toBe('er');
+                expect(fs.existsSync(path.join(kAPIDir, '2', 'dep', 'er'))).toBe(true);
+                var xyz = fs.readFileSync(path.join(kAPIDir, '2', 'package.json'), 'utf-8');
+                var dependencies = JSON.parse(xyz).edp.dependencies;
+                // 即便以前写的版本号有问题，我们也不要去动它
+                expect(dependencies['er']).toBe('hello world');
+                done();
+            });
         });
     });
 });

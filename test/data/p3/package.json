@@ -14,7 +14,16 @@
         "loaderUrl": "http://s1.bdstatic.com/r/www/cache/ecom/esl/1-8-2/esl.js",
         "dependencies": {
             "er": "3.1.0-beta.3",
-            "bat-ria": "~0.1.0"
+            "bat-ria": "~0.1.0",
+            "ef": "~3.1.0-beta.2",
+            "eoo": "~0.0.8",
+            "esui": "~3.1.0-beta.3",
+            "etpl": "~2.1.2",
+            "mini-event": "~1.0.0",
+            "moment": "~2.7.0",
+            "underscore": "~1.6.0",
+            "urijs": "~1.12.0",
+            "my-test": "~1.0.8"
         }
     },
     "dependencies": {},

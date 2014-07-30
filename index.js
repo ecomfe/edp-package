@@ -36,6 +36,7 @@ function apiImplementation(api, args, projectDir, callback) {
             pkg.copyDirectory(
                 context.getShadowDependenciesDir(),
                 context.getDependenciesDir());
+            context.refreshProjectDependencies();
             edp.util.rmdir(context.getShadowDir());
         }
         catch(ex) {
