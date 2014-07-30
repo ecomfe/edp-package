@@ -6,7 +6,8 @@ var path = require('path');
 var edp = require('edp-core');
 var fs = require('fs');
 
-var cli = require('../cli/update').cli;
+var updateapi = require('../cli/update').cli;
+var importapi = require('../cli/import').cli;
 
 var kProjectDir = path.join(__dirname, 'data', 'p3');
 
@@ -37,13 +38,28 @@ describe('update-cli', function(){
     it('run without any arguments', function(done){
         var args = [];
         var opts = { force: true, f: true };
-        cli.main(args, opts, function(error){
+        updateapi.main(args, opts, function(error){
             expect(error).toBe(null);
             expect(fs.existsSync('module.conf')).toBe(true);
             expect(fs.existsSync('dep')).toBe(true);
             expect(fs.existsSync(path.join('dep', 'er', '3.1.0-beta.3', 'package.json'))).toBe(true);
             expect(fs.existsSync(path.join('dep', 'er', '3.1.0-beta.3.md5'))).toBe(true);
             done();
+        });
+    });
+
+    it('delete-older', function(done){
+        importapi.main(['my-test@1.0.7'], {}, function(error){
+            expect(error).toBe(null);
+            expect(fs.existsSync('module.conf')).toBe(true);
+            expect(fs.existsSync('dep')).toBe(true);
+            updateapi.main(['my-test'], { 'force': true, 'delete-older': true }, function(error){
+                expect(error).toBe(null);
+                expect(fs.existsSync(path.join('dep', 'my-test', '1.0.8', 'package.json'))).toBe(true);
+                expect(fs.existsSync(path.join('dep', 'my-test', '1.0.7', 'package.json'))).toBe(false);
+                expect(fs.existsSync(path.join('dep', 'my-test', '1.0.7.md5'))).toBe(false);
+                done();
+            });
         });
     });
 });
