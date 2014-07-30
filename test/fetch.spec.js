@@ -39,6 +39,14 @@ describe('fetch', function(){
         });
     });
 
+    it('er with specific version', function(done){
+        fetch('er@3.0.0', kToDir, function(){
+            expect(fs.existsSync(path.join(kToDir,
+                'er-3.0.0.tgz'))).toBe(true);
+            done();
+        });
+    });
+
     it('er', function(done){
         fetch('er@3.1.0-beta.4', kToDir, function(){
             expect(fs.existsSync(path.join(kToDir,

@@ -18,7 +18,7 @@ describe('import-from-file', function(){
 
     beforeEach(function() {
         originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-        jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
 
         temporaryImportDir = path.join(kToDir, 'dummy-project');
         mkdirp.sync(path.join(temporaryImportDir, '.edpproj'));

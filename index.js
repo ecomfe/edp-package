@@ -3,29 +3,17 @@
  * @author errorrik[errorrik@gmail.com]
  */
 
-
+var factory = require('./lib/context');
 
 /**
- * 字符串驼峰化
- * 
- * @inner
- * @param {string} source 源字符串
- * @return {string} 
+ * 获取当前已经导入的包列表
+ *
+ * @param {string} importDir 导入目录
+ * @return {Object}
  */
-function camelize( source ) {
-    return source.replace( /-([a-z])/ig, function ( $0, alpha ) {
-        return alpha.toUpperCase();
-    } );
-}
-
-
-require( 'fs' ).readdirSync( __dirname + '/lib' ).forEach(
-    function ( file ) {
-        if ( /\.js$/.test( file ) ) {
-            file = file.replace( /\.js$/, '' );
-            exports[ camelize( file ) ] = require( './lib/' + file );
-        }
-    }
-);
+exports.getImported = function(importDir) {
+    var context = factory.create(null, importDir);
+    return context.getImported();
+};
 
 

@@ -14,17 +14,27 @@
  * @description 
  *  
  **/
-var fs = require( 'fs' );
-var path = require( 'path' );
-var Project = path.join( __dirname, 'data', 'dummy-project' );
-var GetManifest = require( '../lib/util/get-manifest' );
+var fs = require('fs');
+var path = require('path');
+var Project = path.join(__dirname, 'data', 'dummy-project');
+var GetManifest = require('../lib/util/get-manifest');
 
 describe( 'get-manifest', function(){
     it( 'default', function(){
-        var depDir = path.join( Project, 'dep' );
-        var manifest = GetManifest( depDir );
-        expect( manifest ).toEqual( JSON.parse( fs.readFileSync(
-            path.join( depDir, 'packages.manifest' ), 'utf-8' ) ) );
+        var depDir = path.join(Project, 'dep');
+        var manifest = GetManifest(depDir);
+        expect(manifest).toEqual(JSON.parse(fs.readFileSync(
+            path.join(depDir, 'packages.manifest'), 'utf-8')));
+    });
+
+    it('getImported', function(){
+        var getImported = require('../index').getImported;
+
+        var depDir = path.join(Project, 'dep');
+        var manifest = getImported(Project);
+
+        expect(manifest).toEqual(JSON.parse(fs.readFileSync(
+            path.join(depDir, 'packages.manifest'), 'utf-8')));
     });
 });
 

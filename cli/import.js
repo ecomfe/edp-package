@@ -38,21 +38,21 @@ cli.options = [ 'older', 'save-dev' ];
  *
  * @param {Array} args 命令运行参数.
  * @param {Array} opts 命令运行参数.
- * @param {function=} function 执行完毕之后的回掉函数.
+ * @param {function=} opt_callback 执行完毕之后的回掉函数.
  */
 cli.main = function (args, opts, opt_callback) {
     var context = factory.create(
         pkg.getTempImportDir(),
         process.cwd());
     var callback = opt_callback || function(){};
+    var dependencies = pkg.getDefinedDependencies();
 
     if (!args.length) {
-        var dependencies = pkg.getDefinedDependencies();
         if (dependencies) {
             async.eachSeries(
                 Object.keys(dependencies),
-                importPackage(context),
-                refresh(context, callback));
+                importPackage(context, dependencies),
+                context.refresh(callback));
             return;
         }
         else {
@@ -63,47 +63,17 @@ cli.main = function (args, opts, opt_callback) {
 
     async.eachSeries(
         args,
-        importPackage(context),
-        refresh(context, callback));
+        importPackage(context, dependencies),
+        context.refresh(callback));
 };
-
-/**
- * 导入package成功之后，更新项目的配置信息
- * 采用的方式是执行 edp project updateLoaderConfig
- * 这样子就可以避免edp-package对edp-project的依赖了
- */
-function refresh(context, callback) {
-    return function(err) {
-        if (err) {
-            callback(err);
-            throw err;
-        }
-
-        require('../lib/util/copy-dir')(
-            context.getShadowDependenciesDir(),
-            context.getDependenciesDir());
-
-        var cmd = edp.util.spawn(
-            'edp',
-            ['project', 'updateLoaderConfig'],
-            { stdio: 'inherit' }
-        );
-        cmd.on('error', function(error){
-            console.log(error);
-        });
-        cmd.on('close', function(code){
-            edp.util.rmdir(context.getShadowDir());
-            callback(code === 0 ? null : code);
-        });
-    };
-}
 
 /**
  * 导入一个package，结束之后执行callback
  * @param {string} name 要导入的package的名字.
+ * @param {Object} dependencies package.json里面定义的依赖信息.
  * @param {function} callback 结束之后回调函数.
  */
-function importPackage(context) {
+function importPackage(context, dependencies) {
     return function(name, callback) {
         var file = path.resolve(process.cwd(), name);
 
@@ -119,6 +89,13 @@ function importPackage(context) {
             method = require('../lib/import-from-remote');
         }
         else {
+            // 如果调用的是 edp import er
+            // 如果metadata里面配置了版本依赖，自动追加
+            if (args.indexOf('@') === -1
+                && dependencies[name]) {
+                args += '@' + dependencies[name];
+            }
+
             method = require('../lib/import-from-registry');
         }
 
