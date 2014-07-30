@@ -6,11 +6,13 @@ update
     edp update
     edp update [name]
     edp update [name] [--force]
+    edp update [name] [--delete-older] [--force]
 
 
 ### Options
 
 + --force         - 没有confirm提示，直接更新。
++ --delete-older  - 是否删除旧的package版本。
 
 
 ### Description

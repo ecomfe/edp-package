@@ -5,8 +5,10 @@
  */
 var edp = require('edp-core');
 var async = require('async');
+var util = require('util');
 
 var factory = require('../lib/context');
+var semver = require('../lib/util/semver');
 var pkg = require('../lib/pkg');
 
 /**
@@ -29,7 +31,7 @@ cli.description = '更新依赖包';
  *
  * @type {Array}
  */
-cli.options = [ 'force' ];
+cli.options = [ 'delete-older', 'force' ];
 
 /**
  * 模块命令行运行入口
@@ -61,7 +63,7 @@ cli.main = function (args, opts, opt_callback) {
             async.eachSeries(
                 Object.keys(dependencies),
                 updatePackage(context, dependencies),
-                context.refresh(callback));
+                context.refresh(callback, opts['delete-older']));
             return;
         }
         else {
@@ -96,16 +98,13 @@ cli.main = function (args, opts, opt_callback) {
     async.eachSeries(
         args,
         updatePackage(context, dependencies),
-        context.refresh(callback));
+        context.refresh(callback, opts['delete-older']));
 };
 
 function getConfirm(context) {
-    var manifest = context.getImported();
-    var semver = require('../lib/util/semver');
-    var util = require('util');
-
     return function(data, callback){
         var msg = '';
+        var manifest = context.getImported();
         var versions = Object.keys(manifest[data.name] || {});
         if (!versions.length) {
             msg = util.format('Import %s %s [y/n]: ',
