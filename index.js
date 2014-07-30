@@ -31,7 +31,7 @@ exports.getImported = function(projectDir) {
 
 function apiImplementation(api, args, projectDir, callback) {
     var context = factory.create(pkg.getTempImportDir(), projectDir);
-    require(api)(context, args, function(error, package){
+    require(api)(context, args, function(error, edpkg){
         try {
             pkg.copyDirectory(
                 context.getShadowDependenciesDir(),
@@ -42,9 +42,9 @@ function apiImplementation(api, args, projectDir, callback) {
         catch(ex) {
             edp.log.warn(ex.toString());
         }
-        callback(error, package);
+        callback(error, edpkg);
     });
-};
+}
 
 
 /**
