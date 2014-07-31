@@ -16,7 +16,8 @@
         "tar": "~0.1.17",
         "fstream": "~0.1.22",
         "adm-zip": "~0.4.3",
-        "async": "~0.9.0"
+        "async": "~0.9.0",
+        "jscs": "~1.5.9"
     },
     "main": "index.js",
     "repository": "git://github.com/ecomfe/edp-package",
