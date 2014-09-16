@@ -89,6 +89,7 @@ function importPackage(context, dependencies) {
             method = require('../lib/import-from-remote');
         }
         else {
+            dependencies = dependencies || {};
             // 如果调用的是 edp import er
             // 如果metadata里面配置了版本依赖，自动追加
             if (args.indexOf('@') === -1
