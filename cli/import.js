@@ -31,7 +31,7 @@ cli.description = '导入包';
  *
  * @type {Array}
  */
-cli.options = [ 'older', 'save-dev' ];
+cli.options = [ 'older', 'save-dev', 'alias:' ];
 
 /**
  * 模块命令行运行入口
@@ -41,10 +41,22 @@ cli.options = [ 'older', 'save-dev' ];
  * @param {function=} opt_callback 执行完毕之后的回掉函数.
  */
 cli.main = function (args, opts, opt_callback) {
+    if (args.length > 1 && opts.alias) {
+        console.log('See `edp import --help`');
+        return;
+    }
+
+    var aliasMap = {};
+    if (args.length) {
+        // 其实只支持一个而已
+        aliasMap[args[0]] = opts.alias;
+    }
+
     var context = factory.create(
         pkg.getTempImportDir(),
         process.cwd());
-    var callback = opt_callback || function(){};
+    context.setAliasMap(aliasMap);
+    var callback = opt_callback || function() {};
     var dependencies = pkg.getDefinedDependencies();
 
     if (!args.length) {
@@ -53,12 +65,11 @@ cli.main = function (args, opts, opt_callback) {
                 Object.keys(dependencies),
                 importPackage(context, dependencies),
                 context.refresh(callback));
-            return;
         }
         else {
             console.log('See `edp import --help`');
-            process.exit(0);
         }
+        return;
     }
 
     async.eachSeries(
@@ -69,9 +80,9 @@ cli.main = function (args, opts, opt_callback) {
 
 /**
  * 导入一个package，结束之后执行callback
- * @param {string} name 要导入的package的名字.
+ * @param {Object} context 执行的上下文信息.
  * @param {Object} dependencies package.json里面定义的依赖信息.
- * @param {function} callback 结束之后回调函数.
+ * @return {function} callback 结束之后回调函数.
  */
 function importPackage(context, dependencies) {
     return function(name, callback) {
@@ -80,7 +91,7 @@ function importPackage(context, dependencies) {
         var method = null;
         var args = name;
 
-        if ( /\.(gz|tgz|zip)$/.test(name) && fs.existsSync(file)) {
+        if (/\.(gz|tgz|zip)$/.test(name) && fs.existsSync(file)) {
             args = file;
             edp.log.info('GET file://%s', path.normalize(file));
             method = require('../lib/import-from-file');

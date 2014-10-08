@@ -56,10 +56,10 @@ describe('import-cli', function(){
         cli.main(args, opts, function(error){
             expect(error).toBe(null);
             expect(fs.existsSync('module.conf')).toBe(true);
-            expect(fs.existsSync(path.join('dep', 'my-test', '1.0.8', 'package.json'))).toBe(true);
-            expect(fs.existsSync(path.join('dep', 'my-test', '1.0.7', 'package.json'))).toBe(true);
-            expect(fs.existsSync(path.join('dep', 'my-test', '1.0.6', 'package.json'))).toBe(true);
-            expect(fs.existsSync(path.join('dep', 'er', '3.1.0-beta.4', 'package.json'))).toBe(true);
+            // expect(fs.existsSync(path.join('dep', 'my-test', 'package.json'))).toBe(true);
+            // expect(fs.existsSync(path.join('dep', 'my-test', 'package.json'))).toBe(true);
+            expect(fs.existsSync(path.join('dep', 'my-test', 'package.json'))).toBe(true);
+            expect(fs.existsSync(path.join('dep', 'er', 'package.json'))).toBe(true);
             done();
         });
     });

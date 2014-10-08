@@ -49,9 +49,9 @@ describe('import-from-registry', function(){
             expect(pkg.name).toBe('er');
             expect(pkg.version).toBe('3.1.0-beta.4');
             expect(fs.existsSync(path.join(temporaryImportDir,
-                'dep', 'er', '3.1.0-beta.4', 'package.json'))).toBe(true);
+                'dep', 'er', 'package.json'))).toBe(true);
             expect(fs.existsSync(path.join(temporaryImportDir,
-                'dep', 'er', '3.1.0-beta.4.md5'))).toBe(true);
+                'dep', 'er.md5'))).toBe(true);
             expect(fs.existsSync(path.join(temporaryImportDir, 'dep', 'etpl'))).toBe(true);
             expect(fs.existsSync(path.join(temporaryImportDir, 'dep', 'mini-event'))).toBe(true);
 
@@ -79,14 +79,14 @@ describe('import-from-registry', function(){
             // 导入成功之后，应该放到projectDir下面?
             // 但是是等全部结束之后才会拷贝到projectDir下面
             expect(fs.existsSync(path.join(temporaryImportDir,
-                'dep', 'er', '3.1.0-beta.4', 'package.json'))).toBe(true);
+                'dep', 'er', 'package.json'))).toBe(true);
             expect(fs.existsSync(path.join(projectDir,
-                'dep', 'er', '3.1.0-beta.4', 'package.json'))).toBe(false);
+                'dep', 'er', 'package.json'))).toBe(false);
 
             expect(fs.existsSync(path.join(temporaryImportDir,
-                'dep', 'er', '3.1.0-beta.4.md5'))).toBe(true);
+                'dep', 'er.md5'))).toBe(true);
             expect(fs.existsSync(path.join(projectDir,
-                'dep', 'er', '3.1.0-beta.4.md5'))).toBe(false);
+                'dep', 'er.md5'))).toBe(false);
 
             expect(fs.existsSync(path.join(temporaryImportDir, 'dep', 'etpl'))).toBe(true);
             expect(fs.existsSync(path.join(temporaryImportDir, 'dep', 'mini-event'))).toBe(true);

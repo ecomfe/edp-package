@@ -1,0 +1,79 @@
+{
+    "ef": {
+        "3.1.0-alpha.3": {
+            "name": "ef",
+            "version": "3.1.0-alpha.3",
+            "main": "main"
+        }
+    },
+    "er": {
+        "3.1.0-alpha.8": {
+            "name": "er",
+            "version": "3.1.0-alpha.8",
+            "main": "main"
+        }
+    },
+    "mini-event": {
+        "1.0.0": {
+            "name": "mini-event",
+            "version": "1.0.0",
+            "main": "main"
+        }
+    },
+    "etpl": {
+        "2.1.0": {
+            "name": "etpl",
+            "version": "2.1.0",
+            "main": "main"
+        }
+    },
+    "esui": {
+        "3.1.0-alpha.8": {
+            "name": "esui",
+            "version": "3.1.0-alpha.8",
+            "main": "main"
+        }
+    },
+    "underscore": {
+        "1.4.4": {
+            "name": "underscore",
+            "version": "1.4.4",
+            "main": "underscore"
+        }
+    },
+    "moment": {
+        "2.0.1": {
+            "name": "moment",
+            "version": "2.0.1",
+            "main": "moment"
+        }
+    },
+    "esf-ms": {
+        "1.0.2": {
+            "name": "esf-ms",
+            "version": "1.0.2",
+            "main": "main"
+        }
+    },
+    "est": {
+        "1.1.0": {
+            "name": "est",
+            "version": "1.1.0",
+            "main": "main"
+        }
+    },
+    "urijs": {
+        "1.12.0": {
+            "name": "urijs",
+            "version": "1.12.0",
+            "main": "./src/URI"
+        }
+    },
+    "bat-ria": {
+        "0.1.7": {
+            "name": "bat-ria",
+            "version": "0.1.7",
+            "main": "main"
+        }
+    }
+}

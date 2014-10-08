@@ -44,9 +44,9 @@ cli.main = function (args, opts, opt_callback) {
     var context = factory.create(
         pkg.getTempImportDir(),
         process.cwd());
-    var callback = opt_callback || function(){};
+    var callback = opt_callback || function() {};
 
-    if (!opts['force']) {
+    if (!opts.force) {
         // 如果不是强制update，那么每次更新之前需要确认一下。
         context.setConfirm(getConfirm(context));
     }
@@ -73,7 +73,7 @@ cli.main = function (args, opts, opt_callback) {
     }
 
     var invalidPackages = [];
-    args = args.filter(function(item){
+    args = args.filter(function(item) {
         if (!dependencies[item]) {
             invalidPackages.push(item);
             return false;
@@ -102,7 +102,7 @@ cli.main = function (args, opts, opt_callback) {
 };
 
 function getConfirm(context) {
-    return function(data, callback){
+    return function(data, callback) {
         var msg = '';
         var manifest = context.getImported();
         var versions = Object.keys(manifest[data.name] || {});
@@ -116,17 +116,17 @@ function getConfirm(context) {
                 data.name, version, data.version);
         }
 
-        edp.rl.prompt(msg, function(answer){
+        edp.rl.prompt(msg, function(answer) {
             callback(answer === 'y' || answer === 'Y');
         });
-    }
+    };
 }
 
 /**
  * 导入一个package，结束之后执行callback
- * @param {string} name 要导入的package的名字.
+ * @param {Object} context 项目的上下文信息.
  * @param {Object} dependencies package.json里面定义的依赖信息.
- * @param {function} callback 结束之后回调函数.
+ * @return {function} 结束之后回调函数.
  */
 function updatePackage(context, dependencies) {
     // 已经在dep目录下存在的package
@@ -143,7 +143,7 @@ function updatePackage(context, dependencies) {
     //   },
     //   ...
     // }
-    return function(name, callback){
+    return function(name, callback) {
         var version = dependencies[name];
         if (!version) {
             callback(new Error('No matched version for ' + name + '!'));

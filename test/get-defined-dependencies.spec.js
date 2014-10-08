@@ -36,7 +36,7 @@ describe('get-defined-dependencies', function(){
         expect(api(kP2Dir)).toEqual(kExpected);
     });
     it('invalid', function(){
-        expect(api(kData)).toEqual({});
+        expect(api(kData)).toEqual(null);
     });
 });
 

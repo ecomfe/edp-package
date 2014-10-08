@@ -17,21 +17,32 @@
 var fs = require('fs');
 var path = require('path');
 var Project = path.join(__dirname, 'data', 'dummy-project');
-var GetManifest = require('../lib/util/get-manifest');
+var Project2 = path.join(__dirname, 'data', 'dummy-project-2');
+var getManifest = require('../lib/util/get-manifest');
 
-describe( 'get-manifest', function(){
-    it( 'default', function(){
+describe('get-manifest', function() {
+    it('default', function() {
         var depDir = path.join(Project, 'dep');
-        var manifest = GetManifest(depDir);
+        var manifest = getManifest(depDir);
         expect(manifest).toEqual(JSON.parse(fs.readFileSync(
             path.join(depDir, 'packages.manifest'), 'utf-8')));
     });
 
-    it('getImported', function(){
+    it('getImported old format', function() {
         var getImported = require('../index').getImported;
 
         var depDir = path.join(Project, 'dep');
         var manifest = getImported(Project);
+
+        expect(manifest).toEqual(JSON.parse(fs.readFileSync(
+            path.join(depDir, 'packages.manifest'), 'utf-8')));
+    });
+
+    it('getImported new format', function() {
+        var getImported = require('../index').getImported;
+
+        var depDir = path.join(Project2, 'dep');
+        var manifest = getImported(Project2);
 
         expect(manifest).toEqual(JSON.parse(fs.readFileSync(
             path.join(depDir, 'packages.manifest'), 'utf-8')));

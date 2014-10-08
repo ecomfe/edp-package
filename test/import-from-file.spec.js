@@ -48,9 +48,9 @@ describe('import-from-file', function(){
                 expect(pkg.name).toBe('my-test');
                 expect(pkg.version).toBe('1.0.8');
                 expect(fs.existsSync(path.join(temporaryImportDir,
-                    'dep', 'my-test', '1.0.8'))).toBe(true);
+                    'dep', 'my-test'))).toBe(true);
                 expect(fs.existsSync(path.join(temporaryImportDir,
-                    'dep', 'my-test', '1.0.8.md5'))).toBe(true);
+                    'dep', 'my-test.md5'))).toBe(true);
                 done();
             });
         });
@@ -68,9 +68,9 @@ describe('import-from-file', function(){
                 expect(pkg.name).toBe('er');
                 expect(pkg.version).toBe('3.1.0-beta.4');
                 expect(fs.existsSync(path.join(temporaryImportDir,
-                    'dep', 'er', '3.1.0-beta.4', 'package.json'))).toBe(true);
+                    'dep', 'er', 'package.json'))).toBe(true);
                 expect(fs.existsSync(path.join(temporaryImportDir,
-                    'dep', 'er', '3.1.0-beta.4.md5'))).toBe(true);
+                    'dep', 'er.md5'))).toBe(true);
                 expect(fs.existsSync(path.join(temporaryImportDir, 'dep', 'etpl'))).toBe(true);
                 expect(fs.existsSync(path.join(temporaryImportDir, 'dep', 'mini-event'))).toBe(true);
 

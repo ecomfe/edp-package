@@ -10,7 +10,7 @@
     "dependencies": {
         "edp-core": "~1.0.12",
         "edp-config": "~1.0.2",
-        "edp-project": "~0.6.1",
+        "edp-project": "beta",
         "mkdirp": "~0.5.0",
         "semver": "~3.0.1",
         "tar": "~0.1.17",
