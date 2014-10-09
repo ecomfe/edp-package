@@ -44,7 +44,11 @@ cli.main = function (args, opts, opt_callback) {
     var context = factory.create(
         pkg.getTempImportDir(),
         process.cwd());
-    var callback = opt_callback || function() {};
+    var callback = opt_callback || function(err) {
+        if (err) {
+            edp.log.fatal(err);
+        }
+    };
 
     if (!opts.force) {
         // 如果不是强制update，那么每次更新之前需要确认一下。
@@ -64,12 +68,11 @@ cli.main = function (args, opts, opt_callback) {
                 Object.keys(dependencies),
                 updatePackage(context, dependencies),
                 context.refresh(callback, opts['delete-older']));
-            return;
         }
         else {
             console.log('See `edp update --help`');
-            process.exit(0);
         }
+        return;
     }
 
     var invalidPackages = [];
@@ -88,7 +91,7 @@ cli.main = function (args, opts, opt_callback) {
 
     if (!args.length) {
         // 过滤之后没有合法的package了，那就啥也不干了
-        process.exit(0);
+        return;
     }
 
     // 指定了名称，需要过滤出当前项目中已经存在的package

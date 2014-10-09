@@ -40,7 +40,8 @@ function apiImplementation(api, args, projectDir, callback) {
             edp.util.rmdir(context.getShadowDir());
         }
         catch(ex) {
-            edp.log.warn(ex.toString());
+            callback(ex, edpkg);
+            return;
         }
         callback(error, edpkg);
     });
@@ -55,7 +56,11 @@ function apiImplementation(api, args, projectDir, callback) {
  */
 exports.importFromRegistry = function(name, opt_projectDir, opt_callback) {
     var projectDir = opt_projectDir || process.cwd();
-    var callback = opt_callback || function(){};
+    var callback = opt_callback || function(err) {
+        if (err) {
+            edp.log.fatal(err);
+        }
+    };
 
     apiImplementation('./lib/import-from-registry', name, projectDir, callback);
 };
@@ -69,7 +74,11 @@ exports.importFromRegistry = function(name, opt_projectDir, opt_callback) {
  */
 exports.importFromFile = function(file, opt_projectDir, opt_callback) {
     var projectDir = opt_projectDir || process.cwd();
-    var callback = opt_callback || function(){};
+    var callback = opt_callback || function(err) {
+        if (err) {
+            edp.log.fatal(err);
+        }
+    };
 
     apiImplementation('./lib/import-from-file', file, projectDir, callback);
 };
