@@ -28,7 +28,7 @@ describe('api', function(){
             "loaderAutoConfig": "js,htm,html,tpl,vm,phtml",
             "loaderUrl": "http://s1.bdstatic.com/r/www/cache/ecom/esl/1-8-2/esl.js",
             "dependencies": {}
-        }));
+        }, null, 4));
 
         mkdirp.sync(path.join(kAPIDir, '2', '.edpproj'));
         fs.writeFileSync(path.join(kAPIDir, '2', 'package.json'), JSON.stringify({
