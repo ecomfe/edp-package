@@ -58,8 +58,8 @@ describe('import-cli', function(){
             expect(fs.existsSync('module.conf')).toBe(true);
             // expect(fs.existsSync(path.join('dep', 'my-test', 'package.json'))).toBe(true);
             // expect(fs.existsSync(path.join('dep', 'my-test', 'package.json'))).toBe(true);
-            expect(fs.existsSync(path.join('dep', 'my-test', 'package.json'))).toBe(true);
-            expect(fs.existsSync(path.join('dep', 'er', 'package.json'))).toBe(true);
+            expect(fs.existsSync(path.join('dep', 'my-test', '1.0.9-rc.7', 'package.json'))).toBe(true);
+            expect(fs.existsSync(path.join('dep', 'er', '3.1.0-beta.4', 'package.json'))).toBe(true);
             done();
         });
     });
