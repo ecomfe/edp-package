@@ -35,11 +35,43 @@ describe('import-from-file', function(){
         });
     });
 
-    it('default', function(done){
+    it('default v1', function(done){
         fetch('my-test@1.0.8', kToDir, function(e1, data){
             expect(e1).toBe(null);
             expect(fs.existsSync(data.path)).toBe(true);
 
+            var context = factory.create(temporaryImportDir, temporaryImportDir);
+
+            importapi(context, data.path, function(e2, pkg){
+                expect(e2).toBe(null);
+                expect(pkg).not.toBe(null);
+                expect(pkg.name).toBe('my-test');
+                expect(pkg.version).toBe('1.0.8');
+                expect(fs.existsSync(path.join(temporaryImportDir,
+                    'dep', 'my-test', '1.0.8'))).toBe(true);
+                expect(fs.existsSync(path.join(temporaryImportDir,
+                    'dep', 'my-test', '1.0.8.md5'))).toBe(true);
+                done();
+            });
+        });
+    });
+
+    it('default v2', function(done){
+        fetch('my-test@1.0.8', kToDir, function(e1, data){
+            expect(e1).toBe(null);
+            expect(fs.existsSync(data.path)).toBe(true);
+
+            var config = {
+                edp: {
+                    dependencies: {},
+                    layout: 'v2'
+                }
+            };
+            fs.writeFileSync(
+                path.join(temporaryImportDir, 'package.json'),
+                JSON.stringify(config, null, 4),
+                'utf-8'
+            );
             var context = factory.create(temporaryImportDir, temporaryImportDir);
 
             importapi(context, data.path, function(e2, pkg){
@@ -61,6 +93,17 @@ describe('import-from-file', function(){
             expect(e1).toBe(null);
             expect(fs.existsSync(data.path)).toBe(true);
 
+            var config = {
+                edp: {
+                    dependencies: {},
+                    layout: 'v2'
+                }
+            };
+            fs.writeFileSync(
+                path.join(temporaryImportDir, 'package.json'),
+                JSON.stringify(config, null, 4),
+                'utf-8'
+            );
             var context = factory.create(temporaryImportDir, temporaryImportDir);
             importapi(context, data.path, function(e2, pkg){
                 expect(e2).toBe(null);

@@ -42,8 +42,8 @@ describe('update-cli', function(){
             expect(error).toBe(null);
             expect(fs.existsSync('module.conf')).toBe(true);
             expect(fs.existsSync('dep')).toBe(true);
-            expect(fs.existsSync(path.join('dep', 'er', 'package.json'))).toBe(true);
-            expect(fs.existsSync(path.join('dep', 'er.md5'))).toBe(true);
+            expect(fs.existsSync(path.join('dep', 'er', '3.1.0-beta.3', 'package.json'))).toBe(true);
+            expect(fs.existsSync(path.join('dep', 'er', '3.1.0-beta.3.md5'))).toBe(true);
             done();
         });
     });
@@ -55,9 +55,10 @@ describe('update-cli', function(){
             expect(fs.existsSync('dep')).toBe(true);
             updateapi.main(['my-test'], { 'force': true, 'delete-older': true }, function(error){
                 expect(error).toBe(null);
-                // expect(fs.existsSync(path.join('dep', 'my-test', '1.0.8', 'package.json'))).toBe(true);
-                expect(fs.existsSync(path.join('dep', 'my-test', 'package.json'))).toBe(true);
-                expect(fs.existsSync(path.join('dep', 'my-test.md5'))).toBe(true);
+                expect(fs.existsSync(path.join('dep', 'my-test', '1.0.7', 'package.json'))).toBe(false);
+                expect(fs.existsSync(path.join('dep', 'my-test', '1.0.7.md5'))).toBe(false);
+                expect(fs.existsSync(path.join('dep', 'my-test', '1.0.9-rc.7', 'package.json'))).toBe(true);
+                expect(fs.existsSync(path.join('dep', 'my-test', '1.0.9-rc.7.md5'))).toBe(true);
                 done();
             });
         });
