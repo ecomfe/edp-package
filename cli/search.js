@@ -26,7 +26,8 @@ cli.description = '查询现有的包';
  * @param {Array} args 命令运行参数
  */
 cli.main = function(args) {
-    console.log('See `http://edp.baidu.com`');
+    var search = require('../lib/search');
+    search.run(args);
 };
 
 /**
