@@ -6,7 +6,7 @@ import
     edp import <name>[@version]
     edp import <localfile>
     edp import <http://git.baidu.com/bec/web/repository/archive.tar.gz?ref=1.0.0>
-    edp import <package.json> [--older] [--save-dev] [--alias=dirname]
+    edp import <package.json> [--older] [--save-dev] [--force] [--alias=dirname]
 
 
 ### Description

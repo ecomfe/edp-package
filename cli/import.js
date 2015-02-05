@@ -4,8 +4,10 @@
  */
 var fs = require('fs');
 var path = require('path');
+var util = require('util');
 
 var async = require('async');
+var semver = require('semver');
 var edp = require('edp-core');
 
 var pkg = require('../lib/pkg');
@@ -31,7 +33,7 @@ cli.description = '导入包';
  *
  * @type {Array}
  */
-cli.options = [ 'older', 'save-dev', 'alias:' ];
+cli.options = [ 'older', 'save-dev', 'force', 'alias:' ];
 
 /**
  * 模块命令行运行入口
@@ -56,6 +58,12 @@ cli.main = function (args, opts, opt_callback) {
         pkg.getTempImportDir(),
         process.cwd());
     context.setAliasMap(aliasMap);
+
+    if (!opts.force) {
+        // 如果不是强制import, 那么每次更新之前需要确认一下。
+        context.setConfirm(getConfirm(context));
+    }
+
     var callback = opt_callback || function() {};
     var dependencies = pkg.getDefinedDependencies();
 
@@ -77,6 +85,27 @@ cli.main = function (args, opts, opt_callback) {
         importPackage(context, dependencies),
         context.refresh(callback));
 };
+
+function getConfirm(context) {
+    return function(data, callback) {
+        var msg = '';
+        var manifest = context.getImported();
+        var versions = Object.keys(manifest[data.name] || {});
+        if (!versions.length) {
+            msg = util.format('Import %s %s [y/n]: ',
+                data.name, data.version);
+        }
+        else {
+            var version = semver.maxSatisfying(versions, '*');
+            msg = util.format('Upgrade %s %s → %s [y/n]: ',
+                data.name, version, data.version);
+        }
+
+        edp.rl.prompt(msg, function(answer) {
+            callback(answer === 'y' || answer === 'Y');
+        });
+    };
+}
 
 /**
  * 导入一个package，结束之后执行callback
