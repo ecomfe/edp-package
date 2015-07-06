@@ -17,7 +17,7 @@ describe('import-cli', function(){
         process.chdir(kProjectDir);
 
         originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-        jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
     });
 
     afterEach(function(){
@@ -36,7 +36,7 @@ describe('import-cli', function(){
 
     it('run without any arguments', function(done){
         var args = [];
-        var opts = {};
+        var opts = {force: true};
         cli.main(args, opts, function(error){
             expect(error).toBe(null);
             expect(fs.existsSync('module.conf')).toBe(true);
@@ -52,13 +52,13 @@ describe('import-cli', function(){
             path.join(__dirname, 'my-test-1.0.6.tgz'),
             'http://edp-registry.baidu.com/er/-/er-3.1.0-beta.4.tgz'
         ];
-        var opts = {};
+        var opts = {force: true};
         cli.main(args, opts, function(error){
             expect(error).toBe(null);
             expect(fs.existsSync('module.conf')).toBe(true);
             // expect(fs.existsSync(path.join('dep', 'my-test', 'package.json'))).toBe(true);
             // expect(fs.existsSync(path.join('dep', 'my-test', 'package.json'))).toBe(true);
-            expect(fs.existsSync(path.join('dep', 'my-test', '1.0.9-rc.7', 'package.json'))).toBe(true);
+            expect(fs.existsSync(path.join('dep', 'my-test', '1.0.9-rc.8', 'package.json'))).toBe(true);
             expect(fs.existsSync(path.join('dep', 'er', '3.1.0-beta.4', 'package.json'))).toBe(true);
             done();
         });

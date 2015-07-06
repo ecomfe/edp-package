@@ -18,7 +18,7 @@ describe('update-cli', function(){
         process.chdir(kProjectDir);
 
         originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-        jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
     });
 
     afterEach(function(){
@@ -49,7 +49,7 @@ describe('update-cli', function(){
     });
 
     it('delete-older', function(done){
-        importapi.main(['my-test@1.0.7'], {}, function(error){
+        importapi.main(['my-test@1.0.7'], {force: true}, function(error){
             expect(error).toBe(null);
             expect(fs.existsSync('module.conf')).toBe(true);
             expect(fs.existsSync('dep')).toBe(true);
@@ -57,8 +57,8 @@ describe('update-cli', function(){
                 expect(error).toBe(null);
                 expect(fs.existsSync(path.join('dep', 'my-test', '1.0.7', 'package.json'))).toBe(false);
                 expect(fs.existsSync(path.join('dep', 'my-test', '1.0.7.md5'))).toBe(false);
-                expect(fs.existsSync(path.join('dep', 'my-test', '1.0.9-rc.7', 'package.json'))).toBe(true);
-                expect(fs.existsSync(path.join('dep', 'my-test', '1.0.9-rc.7.md5'))).toBe(true);
+                expect(fs.existsSync(path.join('dep', 'my-test', '1.0.9-rc.8', 'package.json'))).toBe(true);
+                expect(fs.existsSync(path.join('dep', 'my-test', '1.0.9-rc.8.md5'))).toBe(true);
                 done();
             });
         });
