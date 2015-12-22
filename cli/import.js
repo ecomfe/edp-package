@@ -58,6 +58,7 @@ cli.main = function (args, opts, opt_callback) {
         pkg.getTempImportDir(),
         process.cwd());
     context.setAliasMap(aliasMap);
+    context.setPkgs(args);
 
     if (!opts.force) {
         // 如果不是强制import, 那么每次更新之前需要确认一下。
