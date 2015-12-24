@@ -31,6 +31,7 @@ exports.getImported = function(projectDir) {
 
 function apiImplementation(api, args, projectDir, callback) {
     var context = factory.create(pkg.getTempImportDir(), projectDir);
+    context.addPkgs(args);
     require(api)(context, args, function(error, edpkg){
         try {
             pkg.copyDirectory(
