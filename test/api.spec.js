@@ -17,6 +17,7 @@ describe('api', function(){
     var originalTimeout;
 
     beforeEach(function() {
+        // console.log('beforeEach');
         originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
@@ -31,6 +32,42 @@ describe('api', function(){
         }, null, 4));
 
         mkdirp.sync(path.join(kAPIDir, '2', '.edpproj'));
+        mkdirp.sync(path.join(kAPIDir, '2', 'dep'));
+        // 构造unimport的测试环境
+        mkdirp.sync(path.join(kAPIDir, '2', 'dep', 'er'));
+        mkdirp.sync(path.join(kAPIDir, '2', 'dep', 'er', '3.1.0-rc.2'));
+        fs.writeFileSync(path.join(kAPIDir, '2', 'dep', 'er', '3.1.0-rc.2', 'package.json'), JSON.stringify({
+            "name": "er",
+            "version": "3.1.0-rc.2",
+            "dependencies": {},
+            "main": "main",
+            "edp": {
+                "srcDir": "src",
+                "dependencies": {
+                    "mini-event": "1.x"
+                },
+                "layout": "v2"
+            }
+        }));
+        mkdirp.sync(path.join(kAPIDir, '2', 'dep', 'mini-event'));
+        mkdirp.sync(path.join(kAPIDir, '2', 'src'));
+        fs.writeFileSync(path.join(kAPIDir, '2', 'module.conf'), JSON.stringify({
+            "baseUrl": "src",
+            "paths": {},
+            "packages": [
+                {
+                    "name": "er",
+                    "location": "../dep/er/3.1.0-rc.2",
+                    "main": "main"
+                },
+                {
+                    "name": "mini-event",
+                    "location": "../dep/mini-event",
+                    "main": "main"
+                }
+            ]
+        }));
+
         fs.writeFileSync(path.join(kAPIDir, '2', 'package.json'), JSON.stringify({
             "name": "x",
             "version": "0.0.1",
@@ -58,6 +95,7 @@ describe('api', function(){
     });
 
     afterEach(function() {
+        // console.log('afterEach');
         jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
 
         if (fs.existsSync('dep')) {
@@ -113,24 +151,37 @@ describe('api', function(){
     });
 
     it('importFromRegistry with new format', function(done){
-        api.importFromRegistry('my-test', path.join(kAPIDir, '2'), function(error, pkg){
+        api.importFromRegistry('er@latest', path.join(kAPIDir, '2'), function(error, pkg){
             expect(error).toBeNull();
-            expect(pkg.name).toBe('my-test');
-            expect(fs.existsSync(path.join(kAPIDir, '2', 'dep', 'my-test'))).toBe(true);
+            expect(pkg.name).toBe('er');
+            expect(fs.existsSync(path.join(kAPIDir, '2', 'dep', 'er'))).toBe(true);
             var xyz = fs.readFileSync(path.join(kAPIDir, '2', 'package.json'), 'utf-8');
             var dependencies = JSON.parse(xyz).edp.dependencies;
-            expect(dependencies['my-test']).not.toBeUndefined();
-
-            api.importFromRegistry('er@latest', path.join(kAPIDir, '2'), function(error, pkg){
+            // 即便以前写的版本号有问题，我们也不要去动它
+            // 由于测试用例里没有这个包，在最后刷新目录时被移除了 这个会不通过
+            expect(dependencies['er']).toBe('hello world');
+            
+            api.importFromRegistry('my-test', path.join(kAPIDir, '2'), function(error, pkg){
                 expect(error).toBeNull();
-                expect(pkg.name).toBe('er');
-                expect(fs.existsSync(path.join(kAPIDir, '2', 'dep', 'er'))).toBe(true);
+                expect(pkg.name).toBe('my-test');
+                expect(fs.existsSync(path.join(kAPIDir, '2', 'dep', 'my-test'))).toBe(true);
                 var xyz = fs.readFileSync(path.join(kAPIDir, '2', 'package.json'), 'utf-8');
                 var dependencies = JSON.parse(xyz).edp.dependencies;
-                // 即便以前写的版本号有问题，我们也不要去动它
-                // expect(dependencies['er']).toBe('hello world'); // 由于测试用例里没有这个包，在最后刷新目录时被移除了 这个会不通过
+                expect(dependencies['my-test']).not.toBeUndefined();
                 done();
             });
+        });
+    });
+
+    it('unimportPackage', function(done){
+        api.unimportPackage('er', path.join(kAPIDir, '2'), function(error, pkg){
+            expect(error).toBeNull();
+            expect(fs.existsSync(path.join(kAPIDir, '2', 'dep', 'er'))).toBe(false);
+            expect(fs.existsSync(path.join(kAPIDir, '2', 'dep', 'mini-event'))).toBe(false);
+            var xyz = fs.readFileSync(path.join(kAPIDir, '2', 'package.json'), 'utf-8');
+            var dependencies = JSON.parse(xyz).dependencies;
+            expect(dependencies['er']).toBeUndefined();
+            done();
         });
     });
 });

@@ -3,7 +3,7 @@
  * @Author: lidianbin(lidianbin@baidu.com)
  * @Date:   2015-12-22 18:19:56
  * @Last Modified by:   lidianbin
- * @Last Modified time: 2015-12-24 13:53:17
+ * @Last Modified time: 2015-12-25 14:49:05
  */
 
 var util = require('util');
@@ -65,7 +65,7 @@ cli.main = function (args, opts, opt_callback) {
     var callback = opt_callback || function () {};
 
     // 移除传入的包
-    require('../lib/unimport-package')(args, context, callback);
+    require('../lib/unimport-package')(context, args, callback);
 
 };
 
