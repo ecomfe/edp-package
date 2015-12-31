@@ -3,7 +3,7 @@
  * @Author: lidianbin(lidianbin@baidu.com)
  * @Date:   2015-12-22 18:19:56
  * @Last Modified by:   lidianbin
- * @Last Modified time: 2015-12-25 14:49:05
+ * @Last Modified time: 2015-12-30 18:18:12
  */
 
 var util = require('util');
@@ -57,6 +57,20 @@ cli.main = function (args, opts, opt_callback) {
         return;
     }
 
+    var dependencies = pkg.getDefinedDependencies();
+    // 判断要引入的包是否已经存在，如果存在则提示请使用update
+    // console.log(dependencies);
+    args = args.filter(function (arg, i) {
+        if (Object.keys(dependencies).indexOf(arg) < 0) {
+            edp.log.warn(util.format('Package `%s` not found!', arg));
+            return false;
+        }
+        context.addPkgs(arg);
+        return true;
+    });
+    if (!args.length) {
+        return;
+    }
     if (!opts.force) {
         // 如果不是强制import, 那么每次更新之前需要确认一下。
         context.setConfirm(getConfirm(context));
