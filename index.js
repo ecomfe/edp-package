@@ -31,6 +31,7 @@ exports.getImported = function(projectDir) {
 
 function apiImplementation(api, args, projectDir, callback) {
     var context = factory.create(pkg.getTempImportDir(), projectDir);
+    context.addPkgs(args);
     require(api)(context, args, function(error, edpkg){
         try {
             pkg.copyDirectory(
@@ -63,6 +64,36 @@ exports.importFromRegistry = function(name, opt_projectDir, opt_callback) {
     };
 
     apiImplementation('./lib/import-from-registry', name, projectDir, callback);
+};
+
+/**
+ * 从项目中移除package. 移除后只更新package
+ * @param {Array|string} name 需要移除的package或者package数组.
+ * @param {string=} opt_projectDir 项目的目录.
+ * @param {function=} opt_callback 成功之后的回调函数.
+ */
+exports.unimportPackage = function(name, opt_projectDir, opt_callback) {
+    var projectDir = opt_projectDir || process.cwd();
+    var callback = opt_callback || function(err) {
+        if (err) {
+            edp.log.fatal(err);
+        }
+    };
+
+    var context = factory.create(pkg.getTempImportDir(), projectDir);
+    context.addPkgs(name);
+    require('./lib/unimport-package')(context, name, function(error, edpkg){
+        try {
+            context.refreshProjectDependencies();
+            edp.util.rmdir(context.getShadowDir());
+        }
+        catch(ex) {
+            callback(ex, edpkg);
+            return;
+        }
+        callback(error, edpkg);
+    });
+    // apiImplementation('./lib/unimport-package', name, projectDir, callback);
 };
 
 /**

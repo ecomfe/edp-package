@@ -46,6 +46,8 @@ describe('import-cli', function(){
     });
 
     it('import specific package', function(done){
+        // 同时引入my-test的三个版本 这三个版本都会被import过来，
+        // 如果这三个版本是分三次引入，则不一定全都存在
         var args = [
             'my-test',
             'my-test@1.0.7',
@@ -56,9 +58,9 @@ describe('import-cli', function(){
         cli.main(args, opts, function(error){
             expect(error).toBe(null);
             expect(fs.existsSync('module.conf')).toBe(true);
-            // expect(fs.existsSync(path.join('dep', 'my-test', 'package.json'))).toBe(true);
-            // expect(fs.existsSync(path.join('dep', 'my-test', 'package.json'))).toBe(true);
             expect(fs.existsSync(path.join('dep', 'my-test', '1.0.9-rc.8', 'package.json'))).toBe(true);
+            expect(fs.existsSync(path.join('dep', 'my-test', '1.0.7', 'package.json'))).toBe(true);
+            expect(fs.existsSync(path.join('dep', 'my-test', '1.0.6', 'package.json'))).toBe(true);
             expect(fs.existsSync(path.join('dep', 'er', '3.1.0-beta.4', 'package.json'))).toBe(true);
             done();
         });

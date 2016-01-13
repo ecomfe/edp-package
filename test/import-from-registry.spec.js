@@ -91,7 +91,7 @@ describe('import-from-registry', function(){
 
             expect(context.hasPackage('er', '3.1.0-beta.4')).toBe(true);
             expect(context.hasPackage('mini-event', '1.0.2')).toBe(true);
-            expect(context.hasPackage('etpl', '3.0.1')).toBe(true);
+            expect(context.hasPackage('etpl', '3.1.0')).toBe(true);
 
             done();
         });
@@ -108,7 +108,7 @@ describe('import-from-registry', function(){
 
             expect(context.hasPackage('er', '3.1.0-beta.4')).toBe(true);
             expect(context.hasPackage('mini-event', '1.0.2')).toBe(true);
-            expect(context.hasPackage('etpl', '3.0.1')).toBe(true);
+            expect(context.hasPackage('etpl', '3.1.0')).toBe(true);
 
             // 导入成功之后，应该放到projectDir下面?
             // 但是是等全部结束之后才会拷贝到projectDir下面
