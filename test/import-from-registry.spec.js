@@ -11,7 +11,7 @@ var edp = require('edp-core');
 
 var importapi = require('../lib/import-from-registry');
 
-describe('import-from-regitgistry', function(){
+describe('import-from-registry', function(){
     var originalTimeout;
     var temporaryImportDir;
     var projectDir;
