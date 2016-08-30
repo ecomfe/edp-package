@@ -26,7 +26,7 @@ describe('import-from-file', function(){
         fs.writeFileSync(path.join(kToDir, 'no-such.tgz'), 'x');
     });
 
-    it('error', function(done){
+    xit('error', function(done){
         var context = factory.create(temporaryImportDir, temporaryImportDir);
 
         importapi(context, 'tmp/no-such.tgz', function(e1){
